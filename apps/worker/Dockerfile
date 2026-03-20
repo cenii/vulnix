@@ -7,6 +7,7 @@ RUN npm run build
 RUN npm prune --production
 
 FROM node:20-alpine
+RUN apk add --no-cache nmap
 WORKDIR /app
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules

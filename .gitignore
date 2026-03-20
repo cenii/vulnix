@@ -1,3 +1,4 @@
 *.env
 infra/docker/core/.env
 infra/docker/worker/.env
+node_modules

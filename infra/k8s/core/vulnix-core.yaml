@@ -36,7 +36,10 @@ spec:
         image: postgres:15-alpine
         env:
         - name: POSTGRES_PASSWORD
-          value: "CAMBIAME" # Usa una pass fuerte
+          valueFrom:
+            secretKeyRef:
+              name: vulnix-passwords
+              key: db-password
         ports:
         - containerPort: 5432
 ---
@@ -77,3 +80,11 @@ spec:
       containers:
       - name: rabbitmq
         image: rabbitmq:3-management-alpine
+        env:
+        - name: RABBITMQ_DEFAULT_PASS
+          valueFrom:
+            secretKeyRef:
+              name: vulnix-passwords
+              key: mq-password
+        - name: RABBITMQ_DEFAULT_USER
+          value: "admin"

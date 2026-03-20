@@ -8,17 +8,16 @@ export class WorkerController {
 
   @MessagePattern('scan_tasks')
   async handleScan(@Payload() data: { target: string; scanId: string }) {
-    console.log(`[Worker] Iniciando escaneo para: ${data.target}`);
+    console.log(`Iniciando escaneo para: ${data.target}`);
 
-    // Ejecutamos el escaneo real
     const result = await this.scanService.executeNmap(data.target);
 
-    // Aquí podrías enviar el resultado de vuelta a otra cola o guardarlo
-    console.log(`[Worker] Escaneo ${data.scanId} finalizado.`);
+    console.log(`Escaneo ${data.scanId} finalizado.`);
     return {
       scanId: data.scanId,
-      output: result,
-      status: 'completed',
+      target: data.target,
+      result: result,
+      timestamp: new Date().toISOString(),
     };
   }
 }

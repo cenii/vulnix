@@ -6,7 +6,7 @@ import { ScanService } from './scan.service';
 export class WorkerController {
   constructor(private readonly scanService: ScanService) {}
 
-  @MessagePattern('new_scan')
+  @MessagePattern('scan_tasks')
   async handleScan(@Payload() data: { target: string; scanId: string }) {
     console.log(`[Worker] Iniciando escaneo para: ${data.target}`);
 

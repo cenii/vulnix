@@ -31,6 +31,8 @@ spec:
               value: "postgresql://postgres:$(DB_PASS)@postgres-service:5432/vulnix"
             - name: RABBITMQ_URL
               value: "amqp://admin:$(MQ_PASS)@rabbitmq-service:5672"
+            - name: RABBITMQ_QUEUE
+              value: "task_created"
           ports:
             - containerPort: 3000
 ---

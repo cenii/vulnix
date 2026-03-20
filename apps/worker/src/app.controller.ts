@@ -1,20 +1,24 @@
 import { Controller } from '@nestjs/common';
-import { EventPattern, Payload } from '@nestjs/microservices';
+import { MessagePattern, Payload } from '@nestjs/microservices';
+import { ScanService } from './scan.service';
 
 @Controller()
-export class AppController {
-  @EventPattern('task_created') // El nombre del evento que Hugo mandará
-  handleTaskCreated(@Payload() data: any) {
-    console.log('--- NUEVA TAREA RECIBIDA ---');
-    console.log(`Target a escanear: ${data.target}`);
-    console.log(`Tipo de escaneo: ${data.type}`);
+export class WorkerController {
+  constructor(private readonly scanService: ScanService) {}
 
-    // Aquí es donde en el siguiente paso llamaremos a Nmap o Nikto
-    this.executeScan(data.target);
-  }
+  @MessagePattern('new_scan')
+  async handleScan(@Payload() data: { target: string; scanId: string }) {
+    console.log(`[Worker] Iniciando escaneo para: ${data.target}`);
 
-  private executeScan(target: string) {
-    console.log(`Simulando escaneo de vulnerabilidades en ${target}...`);
-    // Lógica de hacking próximamente...
+    // Ejecutamos el escaneo real
+    const result = await this.scanService.executeNmap(data.target);
+
+    // Aquí podrías enviar el resultado de vuelta a otra cola o guardarlo
+    console.log(`[Worker] Escaneo ${data.scanId} finalizado.`);
+    return {
+      scanId: data.scanId,
+      output: result,
+      status: 'completed',
+    };
   }
 }

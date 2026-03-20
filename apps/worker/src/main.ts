@@ -20,8 +20,9 @@ async function bootstrap() {
       options: {
         urls: [rmqUrl],
         queue: rmqQueue,
+        noAck: false,
         queueOptions: {
-          durable: false,
+          durable: true,
         },
       },
     },

@@ -1,4 +1,7 @@
 node_modules
-dist
+apps/*/node_modules
+packages/*/node_modules
+apps/*/dist
+packages/*/dist
 .git
-pnpm-debug.log
+.env

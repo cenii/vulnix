@@ -8,12 +8,16 @@ export class AppController {
   ) { }
 
   @Get('test-scan')
-  async sendTest() {
-    const payload = { target: '1.1.1.1', priority: 'high' };
+  async test() {
+    const payload = { target: '1.1.1.1', user: 'Hugo-Cenii' };
 
-    // Esto envía el mensaje a la cola 'scan_tasks'
-    this.client.emit('new_scan', payload);
-
-    return { message: 'Mensaje enviado a la cola. ¡Álvaro debería verlo!' };
+    // Forzamos a que NestJS intente conectar antes de seguir
+    try {
+      await this.client.connect(); // <--- Añade esto
+      this.client.emit('new_scan', payload);
+      return { status: 'Conectado y enviado' };
+    } catch (error) {
+      return { status: 'Error de conexión', error: error.message };
+    }
   }
 }

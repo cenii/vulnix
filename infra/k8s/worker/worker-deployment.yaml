@@ -32,7 +32,7 @@ spec:
             - name: RABBITMQ_URL
               value: "amqp://admin:$(MQ_PASS)@rabbitmq-service:5672"
             - name: RABBITMQ_QUEUE
-              value: "task_created"
+              value: "scan_tasks"
           ports:
             - containerPort: 3000
 ---
